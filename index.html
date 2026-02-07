@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Rose | A Digital Love Story</title>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'void': '#050203',
+                        'wine': '#2b0a16',
+                        'blood': '#4a0404',
+                        'crimson': '#9f1239',
+                        'gold-dim': '#b45309',
+                        'gold-bright': '#fbbf24',
+                        'rose-dust': '#fda4af',
+                    },
+                    fontFamily: {
+                        'title': ['"Cinzel"', 'serif'],
+                        'body': ['"Playfair Display"', 'serif'],
+                        'ui': ['"Montserrat"', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'bloom': 'bloom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        bloom: {
+                            '0%': { transform: 'scale(0) rotate(-45deg)', opacity: '0' },
+                            '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050203; overflow-x: hidden; }
+        
+        /* The Cinematic Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at center, #1a050a 0%, #050203 100%);
+        }
+
+        /* Section Transitions */
+        .section-container {
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            padding: 2rem;
+            position: relative;
+        }
+        .section-container.active { display: flex; opacity: 1; }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(20, 5, 10, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Cinematic Blur Reveal for Text */
+        .cinematic-reveal {
+            filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease-out;
+        }
+        .cinematic-reveal.visible {
+            filter: blur(0);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Golden Line Animation */
+        .timeline-line {
+            height: 0;
+            transition: height 1.5s ease-in-out;
+        }
+        .timeline-line.grow { height: 100%; }
+
+        /* Flower Bloom Game Nodes */
+        .bud-node {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .bud-node:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px #fbbf24); }
+
+        /* Gate Reveal Animation */
+        .gate {
+            transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        .gate-left { transform-origin: left; }
+        .gate-right { transform-origin: right; }
+        .gate-open .gate-left { transform: perspective(1000px) rotateY(-80deg); opacity: 0; }
+        .gate-open .gate-right { transform: perspective(1000px) rotateY(80deg); opacity: 0; }
+        
+        /* Lock Shackle */
+        .lock-shackle { transition: transform 0.3s; transform-origin: 25px 40px; }
+        .unlocked .lock-shackle { transform: rotate(-30deg) translateY(-10px); }
+
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(45deg, #7f1d1d, #9f1239);
+            color: white;
+            padding: 12px 30px;
+            border: 1px solid #fbbf24;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(159, 18, 57, 0.4);
+            cursor: pointer;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(45deg, #9f1239, #be123c);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-capture {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            opacity: 0.6;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+        .btn-capture:hover { opacity: 1; border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+
+    </style>
+</head>
+<body class="text-rose-dust selection:bg-crimson selection:text-white">
+
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- SECTION 1: HERO -->
+    <div id="section-hero" class="section-container active">
+        <div class="text-center z-10 animate-float">
+            <p class="font-ui text-gold-dim tracking-[0.4em] text-xs md:text-sm mb-6 uppercase">A Rose Day Experience</p>
+            <h1 class="font-title text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-t from-crimson via-rose-500 to-gold-bright mb-8 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
+                Eternal<br>Romance
+            </h1>
+            <div class="h-px w-24 bg-gradient-to-r from-transparent via-gold-dim to-transparent mx-auto mb-8"></div>
+            <p class="text-xl md:text-2xl text-rose-dust/90 font-body italic max-w-lg mx-auto mb-12 leading-relaxed">
+                <!-- EDIT HERE -->
+                "Some loves are fleeting petals.<br>Ours is the whole damn garden."
+            </p>
+            <button onclick="nextSection('section-hero', 'section-story')" class="btn-gold rounded-sm">
+                Begin The Journey
+            </button>
+        </div>
+    </div>
+
+    <!-- SECTION 2: OUR STORY (Cinematic Interaction) -->
+    <div id="section-story" class="section-container">
+        <button onclick="capture('section-story')" class="btn-capture">📸 Save This Moment</button>
+        
+        <h2 class="font-title text-3xl md:text-4xl text-gold-bright mb-16 text-center">The Chapters of Us</h2>
+        
+        <div class="relative w-full max-w-2xl min-h-[400px]">
+            <!-- Vertical Line Container -->
+            <div class="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-wine -translate-x-1/2 overflow-hidden">
+                <div id="story-line" class="timeline-line w-full bg-gradient-to-b from-crimson via-gold-bright to-crimson"></div>
+            </div>
+
+            <!-- Chapter 1 -->
+            <div id="chap-1" class="relative pl-12 md:pl-0 md:flex md:justify-between items-center group w-full mb-12 cinematic-reveal visible">
+                <div class="absolute left-4 md:left-1/2 w-4 h-4 bg-crimson border-2 border-gold-bright rounded-full -translate-x-1/2 z-10 shadow-[0_0_15px_#fbbf24]"></div>
+                <div class="md:w-[45%] md:ml-auto glass p-8 rounded-r-lg md:rounded-lg border-l-2 border-gold-bright">
+                    <span class="text-xs text-gold-dim font-bold tracking-widest uppercase">Chapter I</span>
+                    <h3 class="text-2xl text-white font-title my-2">The First Spark</h3>
+                    <p class="text-sm text-gray-300 font-body leading-relaxed">
+                        <!-- EDIT HERE -->
+                        Remember when we first met? The way you laughed instantly changed the atmosphere of the room. It was electric.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chapter 2 (Hidden initially) -->
+            <div id="chap-2" class="relative pl-12 md:pl-0 md:flex md:flex-row-reverse md:justify-between items-center group w-full mb-12 cinematic-reveal">
+                <div class="absolute left-4 md:left-1/2 w-4 h-4 bg-crimson border-2 border-gold-bright rounded-full -translate-x-1/2 z-10 shadow-[0_0_15px_#fbbf24]"></div>
+                <div class="md:w-[45%] md:mr-auto glass p-8 rounded-r-lg md:rounded-lg border-l-2 border-gold-bright">
+                    <span class="text-xs text-gold-dim font-bold tracking-widest uppercase">Chapter II</span>
+                    <h3 class="text-2xl text-white font-title my-2">The Connection</h3>
+                    <p class="text-sm text-gray-300 font-body leading-relaxed">
+                        <!-- EDIT HERE -->
+                        Late night calls, songs we traded like secrets. I realized I didn't want to spend a single day without your voice in it.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chapter 3 (Hidden initially) -->
+            <div id="chap-3" class="relative pl-12 md:pl-0 md:flex md:justify-between items-center group w-full cinematic-reveal">
+                <div class="absolute left-4 md:left-1/2 w-4 h-4 bg-crimson border-2 border-gold-bright rounded-full -translate-x-1/2 z-10 shadow-[0_0_15px_#fbbf24]"></div>
+                <div class="md:w-[45%] md:ml-auto glass p-8 rounded-r-lg md:rounded-lg border-l-2 border-gold-bright">
+                    <span class="text-xs text-gold-dim font-bold tracking-widest uppercase">Now</span>
+                    <h3 class="text-2xl text-white font-title my-2">The Eternal Bloom</h3>
+                    <p class="text-sm text-gray-300 font-body leading-relaxed">
+                        <!-- EDIT HERE -->
+                        Here we are. Stronger, deeper, and more intense. You are my muse, my calm, and my storm.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-12 flex space-x-4">
+            <button id="btn-next-story" onclick="revealNextChapter()" class="btn-gold rounded-sm text-xs">
+                Next Chapter
+            </button>
+            <button id="btn-finish-story" onclick="nextSection('section-story', 'section-game')" class="btn-gold rounded-sm text-xs hidden">
+                Enter The Garden
+            </button>
+        </div>
+    </div>
+
+    <!-- SECTION 3: GARDEN OF SECRETS (New Game) -->
+    <div id="section-game" class="section-container">
+        <button onclick="capture('section-game')" class="btn-capture">📸 Save This Moment</button>
+        
+        <div class="text-center mb-8 relative z-10">
+            <h2 class="font-title text-3xl text-gold-bright mb-2">The Garden of Secrets</h2>
+            <p class="font-ui text-xs text-rose-dust uppercase tracking-widest">Tap the buds to bloom them</p>
+        </div>
+
+        <!-- The Garden Area -->
+        <div class="relative w-full max-w-4xl h-[500px] border border-white/10 rounded-xl bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center overflow-hidden shadow-2xl">
+            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+            <!-- Flowers (Absolute Positioned) -->
+            <!-- Flower 1 -->
+            <div class="absolute top-[20%] left-[20%] flex flex-col items-center">
+                <div id="bud-1" onclick="bloomFlower(1)" class="bud-node text-4xl opacity-70 animate-float" style="animation-delay: 0s;">🥀</div>
+                <div id="flower-1" class="hidden animate-bloom text-center">
+                    <div class="text-5xl drop-shadow-[0_0_15px_rgba(220,20,60,0.8)]">🌹</div>
+                    <div class="glass p-3 mt-2 rounded-lg max-w-[150px]">
+                        <p class="text-[10px] text-white font-body italic">"Your laugh is my favorite song."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flower 2 -->
+            <div class="absolute top-[60%] left-[30%] flex flex-col items-center">
+                <div id="bud-2" onclick="bloomFlower(2)" class="bud-node text-4xl opacity-70 animate-float" style="animation-delay: 1s;">🥀</div>
+                <div id="flower-2" class="hidden animate-bloom text-center">
+                    <div class="text-5xl drop-shadow-[0_0_15px_rgba(220,20,60,0.8)]">🌹</div>
+                    <div class="glass p-3 mt-2 rounded-lg max-w-[150px]">
+                        <p class="text-[10px] text-white font-body italic">"You make the world feel softer."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flower 3 -->
+            <div class="absolute top-[30%] left-[70%] flex flex-col items-center">
+                <div id="bud-3" onclick="bloomFlower(3)" class="bud-node text-4xl opacity-70 animate-float" style="animation-delay: 2s;">🥀</div>
+                <div id="flower-3" class="hidden animate-bloom text-center">
+                    <div class="text-5xl drop-shadow-[0_0_15px_rgba(220,20,60,0.8)]">🌹</div>
+                    <div class="glass p-3 mt-2 rounded-lg max-w-[150px]">
+                        <p class="text-[10px] text-white font-body italic">"I love our late night talks."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flower 4 -->
+            <div class="absolute top-[70%] left-[60%] flex flex-col items-center">
+                <div id="bud-4" onclick="bloomFlower(4)" class="bud-node text-4xl opacity-70 animate-float" style="animation-delay: 0.5s;">🥀</div>
+                <div id="flower-4" class="hidden animate-bloom text-center">
+                    <div class="text-5xl drop-shadow-[0_0_15px_rgba(220,20,60,0.8)]">🌹</div>
+                    <div class="glass p-3 mt-2 rounded-lg max-w-[150px]">
+                        <p class="text-[10px] text-white font-body italic">"You are my safe space."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flower 5 -->
+            <div class="absolute top-[45%] left-[50%] flex flex-col items-center">
+                <div id="bud-5" onclick="bloomFlower(5)" class="bud-node text-4xl opacity-70 animate-float" style="animation-delay: 1.5s;">🥀</div>
+                <div id="flower-5" class="hidden animate-bloom text-center">
+                    <div class="text-5xl drop-shadow-[0_0_15px_rgba(220,20,60,0.8)]">🌹</div>
+                    <div class="glass p-3 mt-2 rounded-lg max-w-[150px]">
+                        <p class="text-[10px] text-white font-body italic">"Forever isn't long enough."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="garden-next" class="mt-8 hidden opacity-0 transition-opacity duration-1000">
+            <button onclick="nextSection('section-game', 'section-calc')" class="btn-gold rounded-sm">
+                Check Our Vibe
+            </button>
+        </div>
+    </div>
+
+    <!-- SECTION 4: VIBE CALCULATOR -->
+    <div id="section-calc" class="section-container">
+        <button onclick="capture('section-calc')" class="btn-capture">📸 Save This Moment</button>
+
+        <h2 class="font-title text-3xl md:text-4xl text-white mb-4 text-center">Compatibility Algorithm</h2>
+        <p class="text-rose-dust/60 mb-12 text-center max-w-md font-body italic">Our stats according to the universe.</p>
+
+        <div class="glass p-8 md:p-12 rounded-2xl border border-crimson/20 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Sliders -->
+            <div class="space-y-10">
+                <div class="group">
+                    <div class="flex justify-between mb-2">
+                        <label class="font-title text-gold-dim text-sm">Time Spent Laughing</label>
+                        <span class="text-rose-500 font-mono" id="val-1">95%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="95" id="input-1" class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-crimson">
+                </div>
+
+                <div class="group">
+                    <div class="flex justify-between mb-2">
+                        <label class="font-title text-gold-dim text-sm">Food Compatibility</label>
+                        <span class="text-rose-500 font-mono" id="val-2">90%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="90" id="input-2" class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-crimson">
+                </div>
+
+                <div class="group">
+                    <div class="flex justify-between mb-2">
+                        <label class="font-title text-gold-dim text-sm">Telepathic Connection</label>
+                        <span class="text-rose-500 font-mono" id="val-3">100%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="100" id="input-3" class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-crimson">
+                </div>
+            </div>
+
+            <!-- Gauge -->
+            <div class="flex flex-col items-center justify-center relative">
+                <div style="width: 100%; height: 300px; position: relative;">
+                    <canvas id="vibeChart"></canvas>
+                    <div class="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Match Score</p>
+                        <p id="vibe-score" class="text-5xl font-title text-white font-bold drop-shadow-lg">95%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12">
+            <button onclick="nextSection('section-calc', 'section-studio')" class="btn-gold rounded-sm">
+                Enter The Studio
+            </button>
+        </div>
+    </div>
+
+    <!-- SECTION 5: ROSE STUDIO & GIFT -->
+    <div id="section-studio" class="section-container">
+        <button onclick="capture('section-studio')" class="btn-capture">📸 Save This Moment</button>
+        
+        <!-- Tabs -->
+        <div class="flex space-x-8 mb-10 border-b border-white/10 pb-4 z-10">
+            <button onclick="switchTab('create')" id="tab-create" class="text-gold-bright font-title tracking-widest text-sm border-b-2 border-gold-bright pb-1 transition-all">
+                Create Your Rose
+            </button>
+            <button onclick="switchTab('gift')" id="tab-gift" class="text-gray-500 hover:text-white font-title tracking-widest text-sm border-b-2 border-transparent pb-1 transition-all">
+                My Gift To You 🎁
+            </button>
+        </div>
+
+        <div class="glass w-full max-w-4xl min-h-[500px] rounded-2xl relative overflow-hidden flex flex-col justify-center items-center p-4">
+            
+            <!-- PANEL 1: CREATOR (Improved Math) -->
+            <div id="panel-create" class="w-full h-full flex flex-col md:flex-row gap-8 items-center justify-center fade-in">
+                <!-- Controls -->
+                <div class="w-full md:w-1/3 space-y-6 p-4">
+                    <h3 class="text-2xl font-title text-white">Neon Rose</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">I've updated the algorithm. No more creepy textures. Just pure, geometric elegance.</p>
+                    
+                    <div>
+                        <label class="text-[10px] uppercase text-gold-dim block mb-2">Petal Color</label>
+                        <input type="color" id="color-core" value="#e11d48" class="w-full h-8 rounded cursor-pointer bg-transparent border border-gray-700">
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase text-gold-dim block mb-2">Glow Color</label>
+                        <input type="color" id="color-tip" value="#fbbf24" class="w-full h-8 rounded cursor-pointer bg-transparent border border-gray-700">
+                    </div>
+                    
+                    <button onclick="downloadRose()" class="w-full py-3 border border-white/20 text-white hover:bg-white/5 rounded text-xs uppercase tracking-widest transition-colors">
+                        Download Image
+                    </button>
+                </div>
+
+                <!-- Canvas -->
+                <div class="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
+                    <canvas id="roseCanvas" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+            <!-- PANEL 2: THE GIFT (Golden Gate Reveal) -->
+            <div id="panel-gift" class="hidden absolute inset-0 w-full h-full">
+                
+                <!-- The Content Behind Gates -->
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=2572&auto=format&fit=crop');">
+                    <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-8">
+                        <h2 class="text-4xl md:text-6xl font-title text-gold-bright mb-6 animate-pulse-slow drop-shadow-lg">My Heart is Yours</h2>
+                        <p class="text-xl md:text-2xl text-white max-w-xl italic leading-relaxed drop-shadow-md">
+                            <!-- EDIT HERE: THE FINAL LETTER -->
+                            "In a world of algorithms, you are my only constant. This digital rose will never wither, just like my love for you."
+                        </p>
+                        <div class="mt-8 text-6xl animate-bounce">🌹</div>
+                    </div>
+                </div>
+
+                <!-- The Gates Overlay -->
+                <div id="gate-overlay" class="absolute inset-0 z-20 flex gate-container">
+                    <!-- Left Gate -->
+                    <div class="w-1/2 h-full bg-void border-r border-gold-dim/30 flex items-center justify-end gate gate-left relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_right,_var(--tw-gradient-stops))] from-wine to-void opacity-50"></div>
+                        <div class="text-[10rem] text-gold-dim/10 absolute -right-20">✤</div>
+                    </div>
+                    <!-- Right Gate -->
+                    <div class="w-1/2 h-full bg-void border-l border-gold-dim/30 flex items-center justify-start gate gate-right relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] from-wine to-void opacity-50"></div>
+                        <div class="text-[10rem] text-gold-dim/10 absolute -left-20">✤</div>
+                    </div>
+
+                    <!-- Lock Mechanism -->
+                    <div id="gate-lock" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer hover:scale-110 transition-transform" onclick="unlockGate()">
+                        <div class="relative">
+                            <div class="w-16 h-20 border-4 border-gold-bright rounded-t-full rounded-b-lg bg-wine flex items-center justify-center shadow-[0_0_30px_#fbbf24]">
+                                <!-- Shackle -->
+                                <div class="lock-shackle absolute -top-10 left-1/2 -translate-x-1/2 w-10 h-12 border-4 border-gold-bright rounded-t-full border-b-0"></div>
+                                <div class="text-2xl">🔒</div>
+                            </div>
+                            <p class="absolute -bottom-10 left-1/2 -translate-x-1/2 text-gold-bright text-[10px] tracking-widest uppercase w-max">Click to Unlock</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LOGIC -->
+    <script>
+        // --- 1. DOWNLOAD LOGIC (html2canvas) ---
+        function capture(elementId) {
+            const el = document.getElementById(elementId);
+            // Temporarily hide buttons for screenshot
+            const btns = el.querySelectorAll('button');
+            btns.forEach(b => b.style.opacity = '0');
+            
+            html2canvas(el, { backgroundColor: '#050203' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'eternal-memory.png';
+                link.href = canvas.toDataURL();
+                link.click();
+                
+                // Restore buttons
+                btns.forEach(b => b.style.opacity = '1');
+            });
+        }
+
+        // --- 2. NAVIGATION & STORY LOGIC ---
+        let currentChapter = 1;
+        
+        function nextSection(currentId, nextId) {
+            document.getElementById(currentId).style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById(currentId).classList.remove('active');
+                const next = document.getElementById(nextId);
+                next.classList.add('active');
+                
+                // Initialize specific section logic
+                if(nextId === 'section-game') { /* ready */ }
+                if(nextId === 'section-calc') initVibeChart();
+                if(nextId === 'section-studio') drawRose();
+                
+                // Reflow
+                void next.offsetWidth;
+                next.style.opacity = '1';
+            }, 800);
+        }
+
+        function revealNextChapter() {
+            if(currentChapter === 1) {
+                // Reveal Chap 2
+                document.getElementById('chap-2').classList.add('visible');
+                document.getElementById('story-line').style.height = '50%';
+                currentChapter = 2;
+            } else if(currentChapter === 2) {
+                // Reveal Chap 3
+                document.getElementById('chap-3').classList.add('visible');
+                document.getElementById('story-line').style.height = '100%';
+                currentChapter = 3;
+                
+                // Switch Buttons
+                document.getElementById('btn-next-story').classList.add('hidden');
+                document.getElementById('btn-finish-story').classList.remove('hidden');
+            }
+        }
+
+        function switchTab(tab) {
+            const createBtn = document.getElementById('tab-create');
+            const giftBtn = document.getElementById('tab-gift');
+            const createPanel = document.getElementById('panel-create');
+            const giftPanel = document.getElementById('panel-gift');
+
+            if(tab === 'create') {
+                createBtn.classList.add('border-gold-bright', 'text-gold-bright');
+                createBtn.classList.remove('border-transparent', 'text-gray-500');
+                giftBtn.classList.remove('border-gold-bright', 'text-white');
+                giftBtn.classList.add('border-transparent', 'text-gray-500');
+                
+                createPanel.classList.remove('hidden');
+                createPanel.style.display = 'flex'; // Restore flex
+                giftPanel.classList.add('hidden');
+                drawRose();
+            } else {
+                giftBtn.classList.add('border-gold-bright', 'text-white');
+                giftBtn.classList.remove('border-transparent', 'text-gray-500');
+                createBtn.classList.remove('border-gold-bright', 'text-gold-bright');
+                createBtn.classList.add('border-transparent', 'text-gray-500');
+
+                createPanel.classList.add('hidden');
+                createPanel.style.display = 'none';
+                giftPanel.classList.remove('hidden');
+            }
+        }
+
+        // --- 3. BACKGROUND PARTICLES ---
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let embers = [];
+
+        function resizeBg() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+
+        class Ember {
+            constructor() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = Math.random() * bgCanvas.height;
+                this.size = Math.random() * 2;
+                this.speedY = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.5 ? '#9f1239' : '#fbbf24';
+                this.opacity = Math.random();
+            }
+            update() {
+                this.y -= this.speedY;
+                if(this.y < 0) this.y = bgCanvas.height;
+            }
+            draw() {
+                bgCtx.globalAlpha = this.opacity;
+                bgCtx.fillStyle = this.color;
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                bgCtx.fill();
+            }
+        }
+
+        function initBg() {
+            resizeBg();
+            for(let i=0; i<70; i++) embers.push(new Ember());
+            animateBg();
+        }
+        function animateBg() {
+            bgCtx.clearRect(0,0,bgCanvas.width, bgCanvas.height);
+            embers.forEach(e => { e.update(); e.draw(); });
+            requestAnimationFrame(animateBg);
+        }
+        window.addEventListener('resize', resizeBg);
+        initBg();
+
+        // --- 4. GARDEN GAME LOGIC ---
+        let bloomedCount = 0;
+        function bloomFlower(id) {
+            const bud = document.getElementById(`bud-${id}`);
+            const flower = document.getElementById(`flower-${id}`);
+            
+            if(!bud.classList.contains('bloomed')) {
+                bud.style.display = 'none';
+                bud.classList.add('bloomed');
+                flower.classList.remove('hidden');
+                bloomedCount++;
+                
+                if(bloomedCount === 5) {
+                    const nextBtn = document.getElementById('garden-next');
+                    nextBtn.classList.remove('hidden');
+                    setTimeout(() => nextBtn.style.opacity = '1', 500);
+                }
+            }
+        }
+
+        // --- 5. VIBE CALCULATOR ---
+        let vibeChart;
+        function initVibeChart() {
+            const ctx = document.getElementById('vibeChart').getContext('2d');
+            vibeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Match', 'Void'],
+                    datasets: [{
+                        data: [95, 5],
+                        backgroundColor: ['#fbbf24', '#2b0a16'],
+                        borderWidth: 0,
+                        circumference: 180,
+                        rotation: 270,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '85%',
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                }
+            });
+            updateVibe();
+        }
+
+        function updateVibe() {
+            const v1 = parseInt(document.getElementById('input-1').value);
+            const v2 = parseInt(document.getElementById('input-2').value);
+            const v3 = parseInt(document.getElementById('input-3').value);
+            
+            document.getElementById('val-1').innerText = v1 + '%';
+            document.getElementById('val-2').innerText = v2 + '%';
+            document.getElementById('val-3').innerText = v3 + '%';
+            
+            const avg = Math.round((v1+v2+v3)/3);
+            document.getElementById('vibe-score').innerText = avg + '%';
+            vibeChart.data.datasets[0].data = [avg, 100-avg];
+            vibeChart.update();
+        }
+        ['input-1', 'input-2', 'input-3'].forEach(id => document.getElementById(id).addEventListener('input', updateVibe));
+
+        // --- 6. NEW ROSE ALGORITHM (Geometric/Symmetric) ---
+        const roseCanvas = document.getElementById('roseCanvas');
+        const roseCtx = roseCanvas.getContext('2d');
+
+        function drawRose() {
+            const rect = roseCanvas.parentElement.getBoundingClientRect();
+            roseCanvas.width = rect.width;
+            roseCanvas.height = rect.height;
+            const w = roseCanvas.width;
+            const h = roseCanvas.height;
+            const cx = w/2;
+            const cy = h/2;
+
+            roseCtx.clearRect(0,0,w,h);
+            
+            const cMain = document.getElementById('color-core').value;
+            const cGlow = document.getElementById('color-tip').value;
+
+            // Geometric Rose Algorithm (Overlapping Rotated Circles)
+            roseCtx.globalCompositeOperation = 'screen'; // Adds glowing effect
+            
+            const layers = 8;
+            for(let l=0; l<layers; l++) {
+                const radius = (w/3) - (l * 15);
+                const petals = 6;
+                const angleOffset = (l % 2 === 0) ? 0 : (Math.PI/petals); // Alternate rotation
+                
+                for(let p=0; p<petals; p++) {
+                    const angle = (p * (Math.PI*2)/petals) + angleOffset;
+                    const x = cx + Math.cos(angle) * (l * 5); // Slight offset
+                    const y = cy + Math.sin(angle) * (l * 5);
+                    
+                    roseCtx.beginPath();
+                    // Draw oval petal
+                    roseCtx.ellipse(x, y, radius, radius*0.6, angle, 0, Math.PI*2);
+                    
+                    // Gradient
+                    const grad = roseCtx.createRadialGradient(x, y, 0, x, y, radius);
+                    grad.addColorStop(0, `${cMain}20`); // Transparent center
+                    grad.addColorStop(0.7, `${cMain}60`);
+                    grad.addColorStop(1, `${cGlow}aa`); // Glowing edge
+                    
+                    roseCtx.fillStyle = grad;
+                    roseCtx.fill();
+                    
+                    // Stroke
+                    roseCtx.strokeStyle = `${cGlow}40`;
+                    roseCtx.lineWidth = 1;
+                    roseCtx.stroke();
+                }
+            }
+        }
+        document.getElementById('color-core').addEventListener('input', drawRose);
+        document.getElementById('color-tip').addEventListener('input', drawRose);
+        
+        function downloadRose() {
+            const a = document.createElement('a');
+            a.download = 'my-neon-rose.png';
+            a.href = roseCanvas.toDataURL();
+            a.click();
+        }
+
+        // --- 7. GATE UNLOCK ---
+        function unlockGate() {
+            const lock = document.getElementById('gate-lock');
+            const overlay = document.getElementById('gate-overlay');
+            
+            lock.classList.add('unlocked');
+            
+            // Wait for lock animation, then open gate
+            setTimeout(() => {
+                overlay.classList.add('gate-open');
+                lock.style.opacity = '0';
+                
+                // Remove overlay after animation to allow interaction with content below if needed
+                setTimeout(() => {
+                    overlay.style.pointerEvents = 'none';
+                }, 1500);
+            }, 500);
+        }
+
+    </script>
+</body>
+</html>

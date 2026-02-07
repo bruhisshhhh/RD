@@ -646,38 +646,61 @@
 
         // --- 5. ROSE STUDIO (GEOMETRIC SPIRAL - MATCHES BLUE/YELLOW PHOTO) ---
         const rC = document.getElementById('roseCanvas'); const rCtx = rC.getContext('2d');
-        function drawRose() {
-            const rect = rC.parentElement.getBoundingClientRect(); 
-            // Force Square Aspect Ratio based on container width
-            rC.width = rect.width; 
-            rC.height = rect.width; 
-            
-            const w = rC.width; const h = rC.height; const cx = w/2; const cy = h/2;
-            const cCore = document.getElementById('color-core').value;
-            const cTip = document.getElementById('color-tip').value;
-            
-            rCtx.clearRect(0,0,w,h); rCtx.globalCompositeOperation = 'source-over';
-            
-            // Scaling logic
-            const scale = w / 400; 
 
-            // Complex Phyllotaxis Spiral (Geometric "Electric Bloom")
-            for(let i=0; i<300; i++) {
-                const angle = i * 137.5;
-                const r = 2 * Math.sqrt(i) * (20 * scale); // Scaled
-                const x = cx + r * Math.cos(angle * Math.PI/180);
-                const y = cy + r * Math.sin(angle * Math.PI/180);
-                const size = (i/20 + 2) * scale * 3;
-                
+        function drawRose() {
+
+            const rect = rC.parentElement.getBoundingClientRect(); rC.width = rect.width; rC.height = rect.height;
+
+            const w = rC.width; const h = rC.height; const cx = w/2; const cy = h/2;
+
+            const cCore = document.getElementById('color-core').value;
+
+            const cTip = document.getElementById('color-tip').value;
+
+           
+
+            rCtx.clearRect(0,0,w,h); rCtx.globalCompositeOperation = 'source-over';
+
+           
+
+            for(let i=0; i<60; i++) {
+
+                const angle = i * 137.5 * (Math.PI/180);
+
+                const r = 20 * Math.sqrt(i) * 0.8;
+
+                const x = cx + r * Math.cos(angle); const y = cy + r * Math.sin(angle);
+
+                const size = (i * 0.8) + 15;
+
+               
+
+                rCtx.save(); rCtx.translate(x, y); rCtx.rotate(angle);
+
                 rCtx.beginPath();
-                rCtx.arc(x, y, size, 0, Math.PI*2);
-                rCtx.fillStyle = i%2===0 ? cCore : cTip;
-                rCtx.globalAlpha = 0.6;
-                rCtx.fill();
+
+                rCtx.moveTo(0,0);
+
+                rCtx.bezierCurveTo(size, -size/2, size, size/2, 0, size);
+
+                rCtx.bezierCurveTo(-size, size/2, -size, -size/2, 0, 0);
+
+               
+
+                const grad = rCtx.createRadialGradient(0,0,0, 0,0, size);
+
+                grad.addColorStop(0, cCore); grad.addColorStop(1, cTip);
+
+                rCtx.fillStyle = grad; rCtx.globalAlpha = 0.8; rCtx.fill(); rCtx.restore();
+
             }
+
         }
+
         document.getElementById('color-core').addEventListener('input', drawRose);
+
         document.getElementById('color-tip').addEventListener('input', drawRose);
+
         function downloadRose() { const a = document.createElement('a'); a.download = 'my-art-rose.png'; a.href = rC.toDataURL(); a.click(); }
 
         // --- 6. UNLOCK EXPLOSION ---
@@ -733,3 +756,4 @@
     </script>
 </body>
 </html>
+

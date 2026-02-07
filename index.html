@@ -132,7 +132,9 @@
             pointer-events: none;
         }
         .sticky-footer button { pointer-events: auto; }
-
+        #gift-content {
+          overflow-y: auto !important;
+        }
         /* --- FIRE POPUP (Liquid) --- */
         .popup-fire {
             background: #050000;
@@ -506,8 +508,8 @@ AND ITS JUST THE START
             <!-- PANEL 2: FINAL PART -->
             <div id="panel-gift" class="hidden absolute inset-0 w-full h-full bg-void flex items-center justify-center overflow-hidden">
                 <canvas id="explosionCanvas"></canvas>
-                <div id="gift-content" class="text-center opacity-0 transition-opacity duration-1000 z-10 px-8 w-full h-full flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_#4a0404_0%,_#000000_100%)]">
-                    <div class="relative p-8 md:p-12 max-w-2xl">
+                <div id="gift-content" class="text-center opacity-0 transition-opacity duration-1000 z-10 px-8 w-full min-h-full flex flex-col items-center justify-start overflow-y-auto bg-[radial-gradient(circle_at_center,_#4a0404_0%,_#000000_100%)]">
+                    <div class="<div class="py-14 md:py-12">">
                         <p class="text-base md:text-lg font-body text-gold-bright mb-6 leading-relaxed max-w-xl mx-auto">I chose Ahmedabad and then Bangalore because of my ex, out of so many colleges in blr I chose presidency, later we broke up, I felt stupid coming here, thought I might go back, and then out of nowhere you came into my life — became CR by pure coincidence(bc of veena), we got close through a friend(bc of divya), and somehow here we are. If even one thing had gone differently, we probably wouldn’t have met. The probability of us meeting like this has to be something like 1 in 5,400,000.</p>
                         <p class="text-xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-white to-gold-200 font-hand leading-loose glow-text">
                             <!-- EDIT HERE: FINAL LETTER -->
@@ -791,3 +793,4 @@ of crossing paths with you
     </script>
 </body>
 </html>
+

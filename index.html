@@ -35,7 +35,6 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulseGlow 2s infinite',
-                        'shimmer': 'shimmer 2s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -296,7 +295,7 @@
             <div id="chap-5" class="relative pl-16 md:pl-0 md:flex md:justify-between items-center w-full transition-all duration-1000 opacity-0 translate-y-10">
                 <div class="absolute left-6 md:left-1/2 w-3 h-3 bg-white rounded-full md:-translate-x-1/2 z-10 shadow-[0_0_30px_#ffffff]"></div>
                 <div class="md:w-[45%] md:ml-auto glass p-8 rounded-2xl border-l-2 border-white">
-                    <span class="text-[10px] text-white font-bold tracking-[0.2em] uppercase font-ui">Now</span>
+                    <span class="text-[10px] text-gray-200 font-bold tracking-[0.2em] uppercase font-ui">Now</span>
                     <h3 class="text-xl text-white font-title my-2">The Eternal</h3>
                     <p class="text-sm text-gray-400 font-ui leading-relaxed">
                         Here we are. Stronger, deeper, and more intense. You are my muse, my calm, and my storm.
@@ -331,7 +330,7 @@
                 </button>
             </div>
 
-            <!-- FIRE MODAL -->
+            <!-- FIRE MODAL (Liquid Animation) -->
             <div id="msg-modal" class="absolute inset-0 flex items-center justify-center bg-black/70 hidden z-30 p-6 backdrop-blur-md">
                 <div id="modal-card" class="popup-fire p-8 max-w-sm text-center relative">
                     <div class="text-5xl mb-6 text-gold-bright drop-shadow-[0_0_20px_#f59e0b]">🔥</div>
@@ -353,41 +352,43 @@
         </div>
     </div>
 
-    <!-- SECTION 4: VIBE CALCULATOR -->
-    <div id="section-calc" class="section-container pt-24">
-        <h2 class="font-title text-3xl text-gold-bright mb-16 text-center">Compatibility Algorithm</h2>
+    <!-- SECTION 4: VIBE CALCULATOR (MOBILE OPTIMIZED) -->
+    <div id="section-calc" class="section-container pt-24 justify-center">
+        <h2 class="font-title text-3xl text-gold-bright mb-8 text-center">Compatibility Algorithm</h2>
 
-        <div class="glass p-10 md:p-14 rounded-[40px] border border-gold-dim/20 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24 px-6">
-            <div class="space-y-10">
-                <!-- 5 Parameters -->
+        <!-- Compact Glass Card for Mobile -->
+        <div class="glass p-6 md:p-14 rounded-[30px] border border-gold-dim/20 w-full max-w-5xl flex flex-col md:grid md:grid-cols-2 gap-8 items-center mb-24 px-6">
+            
+            <!-- Sliders -->
+            <div class="space-y-6 w-full">
                 <div class="group">
-                    <div class="flex justify-between mb-3"><label class="font-ui text-gray-400 text-[10px] uppercase tracking-widest font-bold">Shared Laughter</label><span class="text-gold-bright font-mono text-sm" id="val-1">95%</span></div>
-                    <input type="range" min="0" max="100" value="95" id="input-1" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between mb-1"><label class="font-ui text-gray-400 text-[9px] uppercase tracking-widest font-bold">Shared Laughter</label><span class="text-gold-bright font-mono text-xs" id="val-1">95%</span></div>
+                    <input type="range" min="0" max="100" value="95" id="input-1" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                 </div>
                 <div class="group">
-                    <div class="flex justify-between mb-3"><label class="font-ui text-gray-400 text-[10px] uppercase tracking-widest font-bold">Food Taste</label><span class="text-gold-bright font-mono text-sm" id="val-2">90%</span></div>
-                    <input type="range" min="0" max="100" value="90" id="input-2" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between mb-1"><label class="font-ui text-gray-400 text-[9px] uppercase tracking-widest font-bold">Food Taste</label><span class="text-gold-bright font-mono text-xs" id="val-2">90%</span></div>
+                    <input type="range" min="0" max="100" value="90" id="input-2" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                 </div>
                 <div class="group">
-                    <div class="flex justify-between mb-3"><label class="font-ui text-gray-400 text-[10px] uppercase tracking-widest font-bold">Telepathy</label><span class="text-gold-bright font-mono text-sm" id="val-3">100%</span></div>
-                    <input type="range" min="0" max="100" value="100" id="input-3" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between mb-1"><label class="font-ui text-gray-400 text-[9px] uppercase tracking-widest font-bold">Telepathy</label><span class="text-gold-bright font-mono text-xs" id="val-3">100%</span></div>
+                    <input type="range" min="0" max="100" value="100" id="input-3" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                 </div>
                 <div class="group">
-                    <div class="flex justify-between mb-3"><label class="font-ui text-gray-400 text-[10px] uppercase tracking-widest font-bold">Comfort in Silence</label><span class="text-gold-bright font-mono text-sm" id="val-4">98%</span></div>
-                    <input type="range" min="0" max="100" value="98" id="input-4" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between mb-1"><label class="font-ui text-gray-400 text-[9px] uppercase tracking-widest font-bold">Comfort in Silence</label><span class="text-gold-bright font-mono text-xs" id="val-4">98%</span></div>
+                    <input type="range" min="0" max="100" value="98" id="input-4" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                 </div>
                 <div class="group">
-                    <div class="flex justify-between mb-3"><label class="font-ui text-gray-400 text-[10px] uppercase tracking-widest font-bold">Chaotic Energy</label><span class="text-gold-bright font-mono text-sm" id="val-5">85%</span></div>
-                    <input type="range" min="0" max="100" value="85" id="input-5" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between mb-1"><label class="font-ui text-gray-400 text-[9px] uppercase tracking-widest font-bold">Chaotic Energy</label><span class="text-gold-bright font-mono text-xs" id="val-5">85%</span></div>
+                    <input type="range" min="0" max="100" value="85" id="input-5" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                 </div>
             </div>
 
-            <!-- Gauge -->
-            <div class="flex flex-col items-center justify-center relative h-[300px]">
-                <canvas id="vibeChart"></canvas>
-                <div class="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2 font-bold">Total Synergy</p>
-                    <p id="vibe-score" class="text-7xl font-title text-gold-bright font-bold drop-shadow-[0_0_30px_rgba(251,191,36,0.6)]">94%</p>
+            <!-- Gauge (Reduced Height for Mobile) -->
+            <div class="relative w-full h-[180px] md:h-[300px] flex justify-center items-center">
+                <canvas id="vibeChart" class="max-h-full"></canvas>
+                <div class="absolute top-[65%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                    <p class="text-[9px] text-gray-500 uppercase tracking-[0.2em] mb-1 font-bold">Total Synergy</p>
+                    <p id="vibe-score" class="text-5xl md:text-7xl font-title text-gold-bright font-bold drop-shadow-[0_0_30px_rgba(251,191,36,0.6)]">94%</p>
                 </div>
             </div>
         </div>
@@ -399,11 +400,11 @@
         </div>
     </div>
 
-    <!-- SECTION 5: STUDIO & GIFT -->
+    <!-- SECTION 5: STUDIO & GIFT (MOBILE OPTIMIZED: FLOWER ON TOP) -->
     <div id="section-studio" class="section-container justify-center">
         
         <!-- Tabs -->
-        <div class="flex space-x-12 mb-8 border-b border-white/5 pb-4 z-10">
+        <div class="flex space-x-12 mb-8 border-b border-white/5 pb-4 z-10 mt-10">
             <button onclick="switchTab('create')" id="tab-create" class="text-neon-blue font-ui tracking-[0.2em] text-[10px] font-bold border-b-2 border-neon-blue pb-2 transition-all">
                 DIGITAL ROSE
             </button>
@@ -412,34 +413,37 @@
             </button>
         </div>
 
-        <div class="glass w-full max-w-4xl min-h-[600px] h-auto rounded-[40px] relative overflow-hidden flex flex-col justify-center items-center py-12 md:py-0">
+        <div class="glass w-full max-w-4xl min-h-[550px] rounded-[40px] relative overflow-hidden flex flex-col justify-center items-center">
             
-            <!-- PANEL 1: CREATOR (Blue Default + Velvet Text) -->
-            <div id="panel-create" class="w-full h-full flex flex-col md:flex-row gap-12 items-center justify-center fade-in px-6 md:px-10">
-                <div class="w-full md:w-1/3 space-y-8 text-center md:text-left">
-                    <h3 class="text-3xl font-title text-white">Electric Bloom</h3>
-                    <p class="text-sm text-blue-300 font-ui italic leading-relaxed border-l-0 md:border-l-2 border-neon-blue md:pl-4 py-2 bg-blue-900/10 rounded-lg md:rounded-r-lg">
+            <!-- PANEL 1: CREATOR (REVERSE LAYOUT FOR MOBILE) -->
+            <div id="panel-create" class="w-full h-full flex flex-col-reverse md:flex-row gap-8 items-center justify-center fade-in p-6 md:p-10">
+                
+                <!-- Controls (Bottom on Phone) -->
+                <div class="w-full md:w-1/3 space-y-6">
+                    <h3 class="text-2xl font-title text-white">Electric Bloom</h3>
+                    <p class="text-xs text-blue-300 font-ui italic leading-relaxed border-l-2 border-neon-blue pl-4 py-2 bg-blue-900/10 rounded-r-lg">
                         "I designed this one for you, but you can always customize it to your liking."
                     </p>
                     
-                    <div class="flex flex-col gap-4">
-                        <div>
-                            <label class="text-[9px] uppercase text-gray-500 block mb-2 tracking-widest font-ui font-bold">Main Color</label>
-                            <input type="color" id="color-core" value="#3b82f6" class="w-full h-12 rounded-xl cursor-pointer bg-transparent border border-white/10">
-                        </div>
-                        <div>
-                            <label class="text-[9px] uppercase text-gray-500 block mb-2 tracking-widest font-ui font-bold">Highlight</label>
-                            <input type="color" id="color-tip" value="#fbbf24" class="w-full h-12 rounded-xl cursor-pointer bg-transparent border border-white/10">
-                        </div>
+                    <div>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 tracking-widest font-ui font-bold">Main Color</label>
+                        <input type="color" id="color-core" value="#3b82f6" class="w-full h-10 rounded-xl cursor-pointer bg-transparent border border-white/10">
+                    </div>
+                    <div>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 tracking-widest font-ui font-bold">Highlight</label>
+                        <input type="color" id="color-tip" value="#fbbf24" class="w-full h-10 rounded-xl cursor-pointer bg-transparent border border-white/10">
                     </div>
                     
-                    <button onclick="drawRose()" class="text-[10px] text-gray-400 uppercase tracking-widest hover:text-white transition-all border-b border-gray-700 hover:border-white pb-1">Regenerate Shape</button>
-
-                    <button onclick="downloadRose()" class="w-full py-4 border border-neon-blue text-neon-blue hover:bg-neon-blue/10 rounded-full text-[10px] uppercase tracking-widest font-bold mt-4 transition-all">
-                        Download Art
-                    </button>
+                    <div class="flex gap-4">
+                        <button onclick="drawRose()" class="text-[9px] text-gray-400 uppercase tracking-widest hover:text-white transition-all border-b border-gray-700 hover:border-white pb-1 flex-1">Regenerate</button>
+                        <button onclick="downloadRose()" class="flex-1 py-3 border border-neon-blue text-neon-blue hover:bg-neon-blue/10 rounded-full text-[9px] uppercase tracking-widest font-bold transition-all">
+                            Download
+                        </button>
+                    </div>
                 </div>
-                <div class="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-black/60 border border-white/5 shadow-2xl rounded-3xl overflow-hidden flex items-center justify-center shrink-0">
+
+                <!-- Canvas (Top on Phone - Square) -->
+                <div class="relative w-full aspect-square max-w-[300px] md:max-w-[450px] bg-black/60 border border-white/5 shadow-2xl rounded-3xl overflow-hidden flex items-center justify-center">
                     <canvas id="roseCanvas" class="w-full h-full"></canvas>
                 </div>
             </div>
@@ -504,9 +508,14 @@
                 document.getElementById(curr).classList.remove('active');
                 const nextEl = document.getElementById(next);
                 nextEl.classList.add('active');
+                
                 if(next === 'section-game') startGameSetup();
                 if(next === 'section-calc') initVibeChart();
-                if(next === 'section-studio') drawRose();
+                if(next === 'section-studio') {
+                    // Delay rose drawing slightly to ensure layout is ready
+                    setTimeout(drawRose, 100);
+                }
+                
                 setTimeout(() => nextEl.style.opacity = '1', 50);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 800);
@@ -538,7 +547,7 @@
                 createP.classList.remove('hidden'); createP.style.display = 'flex'; giftP.classList.add('hidden');
                 tabC.classList.add('text-neon-blue', 'border-neon-blue'); tabC.classList.remove('text-gray-600', 'border-transparent');
                 tabG.classList.remove('text-white', 'border-white'); tabG.classList.add('text-gray-600', 'border-transparent');
-                drawRose();
+                setTimeout(drawRose, 50); // Redraw
             } else {
                 createP.classList.add('hidden'); createP.style.display = 'none'; giftP.classList.remove('hidden');
                 tabG.classList.add('text-white', 'border-white'); tabG.classList.remove('text-gray-600', 'border-transparent');
@@ -641,21 +650,29 @@
         }
         for(let i=1; i<=5; i++) document.getElementById(`input-${i}`).addEventListener('input', updateVibe);
 
-        // --- 5. ROSE STUDIO (RESTORED VELVET ROSE - ORGANIC ALGORITHM) ---
+        // --- 5. ROSE STUDIO (USER CODE INSERTED & SCALED) ---
         const rC = document.getElementById('roseCanvas'); const rCtx = rC.getContext('2d');
         function drawRose() {
-            const rect = rC.parentElement.getBoundingClientRect(); rC.width = rect.width; rC.height = rect.height;
+            const rect = rC.parentElement.getBoundingClientRect(); 
+            // Force Square Aspect Ratio based on container width
+            rC.width = rect.width; 
+            rC.height = rect.width; 
+            
             const w = rC.width; const h = rC.height; const cx = w/2; const cy = h/2;
             const cCore = document.getElementById('color-core').value;
             const cTip = document.getElementById('color-tip').value;
             
             rCtx.clearRect(0,0,w,h); rCtx.globalCompositeOperation = 'source-over';
             
+            // Scaling logic to make sure user's code fits in the canvas
+            // The user's code uses fixed values (20, 15), we scale them relative to canvas width
+            const scale = w / 400; 
+
             for(let i=0; i<60; i++) {
                 const angle = i * 137.5 * (Math.PI/180);
-                const r = 20 * Math.sqrt(i) * 0.8;
+                const r = (20 * Math.sqrt(i) * 0.8) * scale * 5; // Scaled R
                 const x = cx + r * Math.cos(angle); const y = cy + r * Math.sin(angle);
-                const size = (i * 0.8) + 15;
+                const size = ((i * 0.8) + 15) * scale * 1.5; // Scaled Size
                 
                 rCtx.save(); rCtx.translate(x, y); rCtx.rotate(angle);
                 rCtx.beginPath();
@@ -671,9 +688,6 @@
         document.getElementById('color-core').addEventListener('input', drawRose);
         document.getElementById('color-tip').addEventListener('input', drawRose);
         function downloadRose() { const a = document.createElement('a'); a.download = 'my-art-rose.png'; a.href = rC.toDataURL(); a.click(); }
-        // Ensure initial draw
-        window.addEventListener('load', drawRose);
-        window.addEventListener('resize', drawRose);
 
         // --- 6. UNLOCK EXPLOSION ---
         const expC = document.getElementById('explosionCanvas');
